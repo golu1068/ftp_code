@@ -4,9 +4,15 @@ import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
 import numpy as np
+import pandas as pd
 
-def obs_file(pathr, filename, m):
+
+
+
+def obs_file(pathr, filename, m, plot_type, choose_30_1):
     print(filename)
+#    csv_filename = 'test_3.csv'
+#    file_write = open(csv_filename, 'a+', newline='')
     
     #############################################################################c
     mjd=[];l=0;k=0;nosatt=[];secondd=[];SS1=[];SS2=[];offsett=[];CN= [];PRN_1=[];missed_from=[];missed_to=[];
@@ -85,8 +91,8 @@ def obs_file(pathr, filename, m):
             else:
                 second = conv.time2sec(hour,minute,sec)
                 change = nosat - nosat_start
-                
-                if ((second - second_start)!= 30 and (second - second_start)!= 0):
+                if ((second - second_start)!= choose_30_1 and (second - second_start)!= 0):
+#                if ((second - second_start)!= 1 and (second - second_start)!= 0):
                     hh_start, mm_start, ss_start = conv.sec2time(second_start)
                     hh, mm ,ss = conv.sec2time(second)
                     
@@ -309,7 +315,8 @@ def obs_file(pathr, filename, m):
                     PRN_11.append(D2)
                     PRN_11.append(S2)
                 else:
-                    print("PRN is greater than 11 for file %s at %d:%d:%f" %(filename, hour, minute, sec))
+#                    print("PRN is greater than 11 for file %s at %d:%d:%f" %(filename, hour, minute, sec))
+                    pass
 #                    print(filename)
                     
                 if (prn != 1):
@@ -350,41 +357,52 @@ def obs_file(pathr, filename, m):
 ##    plt.xlabel("Number of Samples", fontdict=None, labelpad=None)
 ##    plt.ylabel("Offset", fontdict=None, labelpad=None)   
 ##    fig.savefig(os.path.join(pathr,"%s_CN.png" %filename[0:8]))
-
-    for j in np.arange(3, int(len(PRN_1)), 8):
+        
+    parame = plot_type    ## 0:range, 1:phase, 2:doppler, 3:C/N
+    
+    for j in np.arange(parame, int(len(PRN_1)), 8):
         y_CN_1_PRN_1.append(PRN_1[j])
         y_CN_2_PRN_1.append(PRN_1[j+4])
-    for j in np.arange(3, int(len(PRN_2)), 8):
+    for j in np.arange(parame, int(len(PRN_2)), 8):
         y_CN_1_PRN_2.append(PRN_2[j])
         y_CN_2_PRN_2.append(PRN_2[j+4])
-    for j in np.arange(3, int(len(PRN_3)), 8):
+    for j in np.arange(parame, int(len(PRN_3)), 8):
         y_CN_1_PRN_3.append(PRN_3[j])
         y_CN_2_PRN_3.append(PRN_3[j+4])
-    for j in np.arange(3, int(len(PRN_4)), 8):
+    for j in np.arange(parame, int(len(PRN_4)), 8):
         y_CN_1_PRN_4.append(PRN_4[j])
         y_CN_2_PRN_4.append(PRN_4[j+4])
-    for j in np.arange(3, int(len(PRN_5)), 8):
+    for j in np.arange(parame, int(len(PRN_5)), 8):
         y_CN_1_PRN_5.append(PRN_5[j])
         y_CN_2_PRN_5.append(PRN_5[j+4])
-    for j in np.arange(3, int(len(PRN_6)), 8):
+    for j in np.arange(parame, int(len(PRN_6)), 8):
         y_CN_1_PRN_6.append(PRN_6[j])
         y_CN_2_PRN_6.append(PRN_6[j+4])
-    for j in np.arange(3, int(len(PRN_7)), 8):
+    for j in np.arange(parame, int(len(PRN_7)), 8):
         y_CN_1_PRN_7.append(PRN_7[j])
         y_CN_2_PRN_7.append(PRN_7[j+4])
-    for j in np.arange(3, int(len(PRN_8)), 8):
+    for j in np.arange(parame, int(len(PRN_8)), 8):
         y_CN_1_PRN_8.append(PRN_8[j])
         y_CN_2_PRN_8.append(PRN_8[j+4])
-    for j in np.arange(3, int(len(PRN_9)), 8):
+    for j in np.arange(parame, int(len(PRN_9)), 8):
         y_CN_1_PRN_9.append(PRN_9[j])
         y_CN_2_PRN_9.append(PRN_9[j+4])
-    for j in np.arange(3, int(len(PRN_10)), 8):
+    for j in np.arange(parame, int(len(PRN_10)), 8):
         y_CN_1_PRN_10.append(PRN_10[j])
         y_CN_2_PRN_10.append(PRN_10[j+4])
-    for j in np.arange(3, int(len(PRN_11)), 8):
+    for j in np.arange(parame, int(len(PRN_11)), 8):
         y_CN_1_PRN_11.append(PRN_11[j])
         y_CN_2_PRN_11.append(PRN_11[j+4])
-        
+#    #########################################################################################
+#    diff=[];
+#    for k in range(1,len(y_CN_1_PRN_2)):
+#        diff.append(y_CN_1_PRN_2[k] - y_CN_1_PRN_2[k-1])
+#    y_CN_1_PRN_2 = diff
+#    diff_2=[];
+#    for k in range(1,len(y_CN_1_PRN_2)):
+#        diff_2.append(y_CN_1_PRN_2[k] - y_CN_1_PRN_2[k-1])
+#    y_CN_2_PRN_2 = diff_2
+#    ########################################################################################
     x_CN_1_PRN_1 = list(range(0,int(len(PRN_1)/8)))
     x_CN_1_PRN_2 = list(range(0,int(len(PRN_2)/8)))
     x_CN_1_PRN_3 = list(range(0,int(len(PRN_3)/8)))
@@ -415,6 +433,9 @@ def obs_file(pathr, filename, m):
     x_offset = list(range(0, len(offsett)))
     y_offset = offsett
     
+#    df = pd.DataFrame(offsett)   
+#    df.to_csv(file_write, index=False)
+#    file_write.close()
 ##################################################################
 ##    print("path= "+os.getcwd())
 ##    os.chdir("../")
@@ -430,39 +451,82 @@ def obs_file(pathr, filename, m):
     
 ################################################################    
     os.chdir("../")
-    
     f = open('report.html','a')
- 
+    ####################################################################################################
+    prn_1_l5=[];prn_1_s =[];prn_2_l5=[];prn_2_s =[];prn_3_l5=[];prn_3_s =[];prn_4_l5=[];prn_4_s =[];prn_5_l5=[];
+    prn_5_s =[];prn_6_l5=[];prn_6_s =[];prn_7_l5=[];prn_7_s =[];prn_8_l5=[];prn_8_s =[];prn_9_l5=[];prn_9_s =[];
+    prn_10_l5=[];prn_10_s =[];prn_11_l5=[];prn_11_s =[];
+    
+    l5_dict =  {1: prn_1_l5,2: prn_2_l5,3: prn_3_l5,4: prn_4_l5,5: prn_5_l5,6: prn_6_l5,
+                7: prn_7_l5,8: prn_8_l5,9: prn_9_l5,10: prn_10_l5,11: prn_11_l5} 
+    s_dict =  {1: prn_1_s,2: prn_2_s,3: prn_3_s,4: prn_4_s,5: prn_5_s,6: prn_6_s,
+                7: prn_7_s,8: prn_8_s,9: prn_9_s,10: prn_10_s,11: prn_11_s} 
+
+    if (plot_type == 0):
+        plot_name = 'range'
+    elif (plot_type == 1):
+        plot_name = 'phase'
+    elif (plot_type == 2):
+        plot_name = 'doppler'
+    else:
+        plot_name = 'C/N'
+    for k in range(1,12):
+        l5_dict[k].append(plot_name + '_L5' + '_prn_' + str(k))
+        s_dict[k].append(plot_name + '_S' + '_prn_' + str(k))
+        
+    xy_CN_1_PRN_1 = go.Scatter( x=x_CN_1_PRN_1, y=y_CN_1_PRN_1, mode='lines+markers', name=prn_1_l5[0] )
+    xy_CN_2_PRN_1 = go.Scatter( x=x_CN_2_PRN_1, y=y_CN_2_PRN_1, mode='lines+markers', name=prn_1_s[0] )
+    xy_CN_1_PRN_2 = go.Scatter( x=x_CN_1_PRN_2, y=y_CN_1_PRN_2, mode='lines+markers', name=prn_2_l5[0] )
+    xy_CN_2_PRN_2 = go.Scatter( x=x_CN_2_PRN_2, y=y_CN_2_PRN_2, mode='lines+markers', name=prn_2_s[0] )
+    xy_CN_1_PRN_3 = go.Scatter( x=x_CN_1_PRN_3, y=y_CN_1_PRN_3, mode='lines+markers', name=prn_3_l5[0] )
+    xy_CN_2_PRN_3 = go.Scatter( x=x_CN_2_PRN_3, y=y_CN_2_PRN_3, mode='lines+markers', name=prn_3_s[0] )
+    xy_CN_1_PRN_4 = go.Scatter( x=x_CN_1_PRN_4, y=y_CN_1_PRN_4, mode='lines+markers', name=prn_4_l5[0] )
+    xy_CN_2_PRN_4 = go.Scatter( x=x_CN_2_PRN_4, y=y_CN_2_PRN_4, mode='lines+markers', name=prn_4_s[0] )
+    xy_CN_1_PRN_5 = go.Scatter( x=x_CN_1_PRN_5, y=y_CN_1_PRN_5, mode='lines+markers', name=prn_5_l5[0] )
+    xy_CN_2_PRN_5 = go.Scatter( x=x_CN_2_PRN_5, y=y_CN_2_PRN_5, mode='lines+markers', name=prn_5_s[0] )
+    xy_CN_1_PRN_6 = go.Scatter( x=x_CN_1_PRN_6, y=y_CN_1_PRN_6, mode='lines+markers', name=prn_6_l5[0] )
+    xy_CN_2_PRN_6 = go.Scatter( x=x_CN_2_PRN_6, y=y_CN_2_PRN_6, mode='lines+markers', name=prn_6_s[0] )
+    xy_CN_1_PRN_7 = go.Scatter( x=x_CN_1_PRN_7, y=y_CN_1_PRN_7, mode='lines+markers', name=prn_7_l5[0] )
+    xy_CN_2_PRN_7 = go.Scatter( x=x_CN_2_PRN_7, y=y_CN_2_PRN_7, mode='lines+markers', name=prn_7_s[0] )
+    xy_CN_1_PRN_8 = go.Scatter( x=x_CN_1_PRN_8, y=y_CN_1_PRN_8, mode='lines+markers', name=prn_8_l5[0] )
+    xy_CN_2_PRN_8 = go.Scatter( x=x_CN_2_PRN_8, y=y_CN_2_PRN_8, mode='lines+markers', name=prn_8_s[0] )
+    xy_CN_1_PRN_9 = go.Scatter( x=x_CN_1_PRN_9, y=y_CN_1_PRN_9, mode='lines+markers', name=prn_9_l5[0] )
+    xy_CN_2_PRN_9 = go.Scatter( x=x_CN_2_PRN_9, y=y_CN_2_PRN_9, mode='lines+markers', name=prn_9_s[0] )
+    xy_CN_1_PRN_10 = go.Scatter( x=x_CN_1_PRN_10, y=y_CN_1_PRN_10, mode='lines+markers', name=prn_10_l5[0] )
+    xy_CN_2_PRN_10 = go.Scatter( x=x_CN_2_PRN_10, y=y_CN_2_PRN_10, mode='lines+markers', name=prn_10_s[0] )
+    xy_CN_1_PRN_11 = go.Scatter( x=x_CN_1_PRN_11, y=y_CN_1_PRN_11, mode='lines+markers', name=prn_11_l5[0] )
+    xy_CN_2_PRN_11 = go.Scatter( x=x_CN_2_PRN_11, y=y_CN_2_PRN_11, mode='lines+markers', name=prn_11_s[0])
     ######################################################################################################
     
     xy_data = go.Scatter( x=x_offset, y=y_offset, mode='lines+markers', name='offset' )
     #########################################################################################
-    xy_CN_1_PRN_1 = go.Scatter( x=x_CN_1_PRN_1, y=y_CN_1_PRN_1, mode='lines+markers', name='CN_1_prn_1' )
-    xy_CN_2_PRN_1 = go.Scatter( x=x_CN_2_PRN_1, y=y_CN_2_PRN_1, mode='lines+markers', name='CN_2_prn_1' )
-    xy_CN_1_PRN_2 = go.Scatter( x=x_CN_1_PRN_2, y=y_CN_1_PRN_2, mode='lines+markers', name='CN_1_prn_2' )
-    xy_CN_2_PRN_2 = go.Scatter( x=x_CN_2_PRN_2, y=y_CN_2_PRN_2, mode='lines+markers', name='CN_2_prn_2' )
-    xy_CN_1_PRN_3 = go.Scatter( x=x_CN_1_PRN_3, y=y_CN_1_PRN_3, mode='lines+markers', name='CN_1_prn_3' )
-    xy_CN_2_PRN_3 = go.Scatter( x=x_CN_2_PRN_3, y=y_CN_2_PRN_3, mode='lines+markers', name='CN_2_prn_3' )
-    xy_CN_1_PRN_4 = go.Scatter( x=x_CN_1_PRN_4, y=y_CN_1_PRN_4, mode='lines+markers', name='CN_1_prn_4' )
-    xy_CN_2_PRN_4 = go.Scatter( x=x_CN_2_PRN_4, y=y_CN_2_PRN_4, mode='lines+markers', name='CN_2_prn_4' )
-    xy_CN_1_PRN_5 = go.Scatter( x=x_CN_1_PRN_5, y=y_CN_1_PRN_5, mode='lines+markers', name='CN_1_prn_5' )
-    xy_CN_2_PRN_5 = go.Scatter( x=x_CN_2_PRN_5, y=y_CN_2_PRN_5, mode='lines+markers', name='CN_2_prn_5' )
-    xy_CN_1_PRN_6 = go.Scatter( x=x_CN_1_PRN_6, y=y_CN_1_PRN_6, mode='lines+markers', name='CN_1_prn_6' )
-    xy_CN_2_PRN_6 = go.Scatter( x=x_CN_2_PRN_6, y=y_CN_2_PRN_6, mode='lines+markers', name='CN_2_prn_6' )
-    xy_CN_1_PRN_7 = go.Scatter( x=x_CN_1_PRN_7, y=y_CN_1_PRN_7, mode='lines+markers', name='CN_1_prn_7' )
-    xy_CN_2_PRN_7 = go.Scatter( x=x_CN_2_PRN_7, y=y_CN_2_PRN_7, mode='lines+markers', name='CN_2_prn_7' )
-    xy_CN_1_PRN_8 = go.Scatter( x=x_CN_1_PRN_8, y=y_CN_1_PRN_8, mode='lines+markers', name='CN_1_prn_8' )
-    xy_CN_2_PRN_8 = go.Scatter( x=x_CN_2_PRN_8, y=y_CN_2_PRN_8, mode='lines+markers', name='CN_2_prn_8' )
-    xy_CN_1_PRN_9 = go.Scatter( x=x_CN_1_PRN_9, y=y_CN_1_PRN_9, mode='lines+markers', name='CN_1_prn_9' )
-    xy_CN_2_PRN_9 = go.Scatter( x=x_CN_2_PRN_9, y=y_CN_2_PRN_9, mode='lines+markers', name='CN_2_prn_9' )
-    xy_CN_1_PRN_10 = go.Scatter( x=x_CN_1_PRN_10, y=y_CN_1_PRN_10, mode='lines+markers', name='CN_1_prn_10' )
-    xy_CN_2_PRN_10 = go.Scatter( x=x_CN_2_PRN_10, y=y_CN_2_PRN_10, mode='lines+markers', name='CN_2_prn_10' )
-    xy_CN_1_PRN_11 = go.Scatter( x=x_CN_1_PRN_11, y=y_CN_1_PRN_11, mode='lines+markers', name='CN_1_prn_11' )
-    xy_CN_2_PRN_11 = go.Scatter( x=x_CN_2_PRN_11, y=y_CN_2_PRN_11, mode='lines+markers', name='CN_2_prn_11' )
+#    xy_CN_1_PRN_1 = go.Scatter( x=x_CN_1_PRN_1, y=y_CN_1_PRN_1, mode='lines+markers', name='CN_1_prn_1' )
+#    xy_CN_2_PRN_1 = go.Scatter( x=x_CN_2_PRN_1, y=y_CN_2_PRN_1, mode='lines+markers', name='CN_2_prn_1' )
+#    xy_CN_1_PRN_2 = go.Scatter( x=x_CN_1_PRN_2, y=y_CN_1_PRN_2, mode='lines+markers', name='CN_1_prn_2' )
+#    xy_CN_2_PRN_2 = go.Scatter( x=x_CN_2_PRN_2, y=y_CN_2_PRN_2, mode='lines+markers', name='CN_2_prn_2' )
+#    xy_CN_1_PRN_3 = go.Scatter( x=x_CN_1_PRN_3, y=y_CN_1_PRN_3, mode='lines+markers', name='CN_1_prn_3' )
+#    xy_CN_2_PRN_3 = go.Scatter( x=x_CN_2_PRN_3, y=y_CN_2_PRN_3, mode='lines+markers', name='CN_2_prn_3' )
+#    xy_CN_1_PRN_4 = go.Scatter( x=x_CN_1_PRN_4, y=y_CN_1_PRN_4, mode='lines+markers', name='CN_1_prn_4' )
+#    xy_CN_2_PRN_4 = go.Scatter( x=x_CN_2_PRN_4, y=y_CN_2_PRN_4, mode='lines+markers', name='CN_2_prn_4' )
+#    xy_CN_1_PRN_5 = go.Scatter( x=x_CN_1_PRN_5, y=y_CN_1_PRN_5, mode='lines+markers', name='CN_1_prn_5' )
+#    xy_CN_2_PRN_5 = go.Scatter( x=x_CN_2_PRN_5, y=y_CN_2_PRN_5, mode='lines+markers', name='CN_2_prn_5' )
+#    xy_CN_1_PRN_6 = go.Scatter( x=x_CN_1_PRN_6, y=y_CN_1_PRN_6, mode='lines+markers', name='CN_1_prn_6' )
+#    xy_CN_2_PRN_6 = go.Scatter( x=x_CN_2_PRN_6, y=y_CN_2_PRN_6, mode='lines+markers', name='CN_2_prn_6' )
+#    xy_CN_1_PRN_7 = go.Scatter( x=x_CN_1_PRN_7, y=y_CN_1_PRN_7, mode='lines+markers', name='CN_1_prn_7' )
+#    xy_CN_2_PRN_7 = go.Scatter( x=x_CN_2_PRN_7, y=y_CN_2_PRN_7, mode='lines+markers', name='CN_2_prn_7' )
+#    xy_CN_1_PRN_8 = go.Scatter( x=x_CN_1_PRN_8, y=y_CN_1_PRN_8, mode='lines+markers', name='CN_1_prn_8' )
+#    xy_CN_2_PRN_8 = go.Scatter( x=x_CN_2_PRN_8, y=y_CN_2_PRN_8, mode='lines+markers', name='CN_2_prn_8' )
+#    xy_CN_1_PRN_9 = go.Scatter( x=x_CN_1_PRN_9, y=y_CN_1_PRN_9, mode='lines+markers', name='CN_1_prn_9' )
+#    xy_CN_2_PRN_9 = go.Scatter( x=x_CN_2_PRN_9, y=y_CN_2_PRN_9, mode='lines+markers', name='CN_2_prn_9' )
+#    xy_CN_1_PRN_10 = go.Scatter( x=x_CN_1_PRN_10, y=y_CN_1_PRN_10, mode='lines+markers', name='CN_1_prn_10' )
+#    xy_CN_2_PRN_10 = go.Scatter( x=x_CN_2_PRN_10, y=y_CN_2_PRN_10, mode='lines+markers', name='CN_2_prn_10' )
+#    xy_CN_1_PRN_11 = go.Scatter( x=x_CN_1_PRN_11, y=y_CN_1_PRN_11, mode='lines+markers', name='CN_1_prn_11' )
+#    xy_CN_2_PRN_11 = go.Scatter( x=x_CN_2_PRN_11, y=y_CN_2_PRN_11, mode='lines+markers', name='CN_2_prn_11' )
     ###########################################################################################
     data_1 = [xy_data, xy_CN_1_PRN_1, xy_CN_2_PRN_1, xy_CN_1_PRN_2, xy_CN_2_PRN_2, xy_CN_1_PRN_3, xy_CN_2_PRN_3, xy_CN_1_PRN_4, xy_CN_2_PRN_4, xy_CN_1_PRN_5,
               xy_CN_2_PRN_5,xy_CN_1_PRN_6, xy_CN_2_PRN_6, xy_CN_1_PRN_7, xy_CN_2_PRN_7, xy_CN_1_PRN_8, xy_CN_2_PRN_8, xy_CN_1_PRN_9, xy_CN_2_PRN_9, 
-              xy_CN_1_PRN_10, xy_CN_2_PRN_10, xy_CN_1_PRN_11, xy_CN_2_PRN_11]    
+              xy_CN_1_PRN_10, xy_CN_2_PRN_10, xy_CN_1_PRN_11, xy_CN_2_PRN_11] 
+#    data_1 = [xy_data]
   ###########################################################################################  
     layout = go.Layout(
     title='Clock Bias plot & C/N ratio for all prn<br>offset in (ns) unit and C/N in (db-hz)',
@@ -502,67 +566,67 @@ def obs_file(pathr, filename, m):
                 dict(
                     args=[{'visible': [False, True, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, 
                                        False, False, False,False, False, False]}],
-                    label='CN_PRN_1',
+                    label='PRN_1',
                     method='update'
                 ),
                 dict(
                     args=[{'visible': [False, False, False, True, True, False, False, False, False, False, False, False, False, False, False, False, False, 
                                        False, False, False, False, False, False]}],
-                    label='CN_PRN_2',
+                    label='PRN_2',
                     method='update'
                 ),
                 dict(
                     args=[{'visible': [False, False, False, False, False, True, True, False, False, False, False, False, False, False, False, False, False, 
                                        False, False, False, False, False, False]}],
-                    label='CN_PRN_3',
+                    label='PRN_3',
                     method='update'
                 ),
                 dict(
                     args=[{'visible': [False, False, False, False, False, False, False, True, True, False, False, False, False, False, False, False, False, 
                                        False, False, False, False, False, False]}],
-                    label='CN_PRN_4',
+                    label='PRN_4',
                     method='update'
                 ),
                 dict(
                     args=[{'visible': [False, False, False, False, False, False, False, False, False, True, True, False, False, False, False, False, False, 
                                        False, False, False, False, False, False]}],
-                    label='CN_PRN_5',
+                    label='PRN_5',
                     method='update'
                 ),
                 dict(
                     args=[{'visible': [False, False, False, False, False, False, False, False, False, False, False, True, True, False, False, False, False, 
                                        False, False, False, False, False, False]}],
-                    label='CN_PRN_6',
+                    label='PRN_6',
                     method='update'
                 ),
                 dict(
                     args=[{'visible': [False, False, False, False, False, False, False, False, False, False, False, False, False, True, True, False, False, 
                                        False, False, False, False, False, False]}],
-                    label='CN_PRN_7',
+                    label='PRN_7',
                     method='update'
                 ),
                 dict(
                     args=[{'visible': [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, True, 
                                        False, False, False, False, False, False]}],
-                    label='CN_PRN_8',
+                    label='PRN_8',
                     method='update'
                 ),
                 dict(
                     args=[{'visible': [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, 
                                        True, True, False, False, False, False]}],
-                    label='CN_PRN_9',
+                    label='PRN_9',
                     method='update'
                 ),
                 dict(
                     args=[{'visible': [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, 
                                        False, False, True, True, False, False]}],
-                    label='CN_PRN_10',
+                    label='PRN_10',
                     method='update'
                 ),
                 dict(
                     args=[{'visible': [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, 
                                        False, False, False, False, True, True]}],
-                    label='CN_PRN_11',
+                    label='PRN_11',
                     method='update'
                 )
             ]),
@@ -642,18 +706,4 @@ def obs_file(pathr, filename, m):
 
     return filename
                     
-                
-
-
-
-
-
-
-
-
-
-
-
-
-            
             
