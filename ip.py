@@ -30,18 +30,18 @@ def ftp(ip_address, destination, m, file_day, cggtts_days):
 #    ftp.login('root',"root_123")
         
     try:
-        ftp.cwd("/2018")                 #  go to the destination dir
+        ftp.cwd("/2019")                 #  go to the destination dir
     except:
-        print("ERROR: 2018 Dir is not available")
+        print("ERROR: 2019 Dir is not available")
         return
     
     try:
-        ftp.cwd("/2018/Rinex")                 #  go to the destination dir
+        ftp.cwd("/2019/Rinex")                 #  go to the destination dir
     except:
         print("ERROR: Rinex file is not available")
         return
         
-    observation_file_pattern = ".18O"    
+    observation_file_pattern = ".19O"    
     path_obs = destination + ip_address[8:14] + "/OBS"
     path_nav = destination + ip_address[8:14] + "/NAV" 
     path_CGGTTS = destination + ip_address[8:14] + "/CGGTTS"
@@ -72,7 +72,7 @@ def ftp(ip_address, destination, m, file_day, cggtts_days):
     
     for filename in range(len(files_rinex)):
 #        if (int(files[filename][4:8]) >= file_day):
-        if (files_rinex[filename][8:12] == ".18O"):
+        if (files_rinex[filename][8:12] == ".19O"):
             os.chdir(path_obs)                   #  change the dir
         else:
             os.chdir(path_nav)            
@@ -91,7 +91,7 @@ def ftp(ip_address, destination, m, file_day, cggtts_days):
 ##############################################################################################
 #    #  Read CGGTTS file from ftp
     try:
-        ftp.cwd("2018/CGGTTS")
+        ftp.cwd("2019/CGGTTS")
     except:
         print("ERROR: CGGTTS dir is not available")
         return
@@ -165,10 +165,3 @@ def ftp(ip_address, destination, m, file_day, cggtts_days):
 
     return ip_address           
             
-            
-    
-    
-
-
-
-    
