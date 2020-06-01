@@ -769,7 +769,3 @@ def cggtts(cggtts_path, file_name):
     cggtts_file.close()
 	
     return file_name
-
-            
-
-
